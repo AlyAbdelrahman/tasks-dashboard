@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "start:api": "json-server --watch db.json --port 3000",
+    "start:all": "concurrently \"npm run start\" \"npm run start:api\""
   },
   "lint-staged": {
     "*.{ts,html}": [
@@ -38,6 +40,7 @@
     "@angular/compiler-cli": "^22.0.0-next.0",
     "@eslint/js": "^10.0.1",
     "angular-eslint": "21.3.1",
+    "concurrently": "^9.2.1",
     "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
