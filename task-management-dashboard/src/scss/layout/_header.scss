@@ -1,7 +1,7 @@
 @use '../abstracts/variables' as *;
 
 .app-header-toolbar {
-  display: grid;
+  display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(200px, 28rem) minmax(0, 1fr);
   grid-template-rows: auto;
   align-items: center;
@@ -30,6 +30,7 @@
     min-height: fit-content;
     padding-block: 0.625rem;
     align-items: center;
+    padding-bottom: 5px !important;
   }
 }
 
@@ -97,31 +98,31 @@
   width: 100%;
   margin: 0;
 
-  ::ng-deep {
-    .mat-mdc-form-field-subscript-wrapper {
-      display: none;
-    }
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
 
-    .mat-mdc-text-field-wrapper {
-      max-height: 33px;
-      font-size: 0.75rem;
-    }
+  .mat-mdc-text-field-wrapper {
+    max-height: 33px;
+    font-size: 0.75rem;
+  }
 
-    .mat-mdc-form-field-infix {
-      min-height: 0;
-      padding-block: 0;
-    }
+  .mat-mdc-form-field-infix {
+    min-height: 0;
+    padding-block: 0;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
 
-    .mat-mdc-form-field-icon-prefix > .mat-icon,
-    .mat-mdc-form-field-text-prefix > .mat-icon {
-      padding: 0 8px 0 0;
-    }
+  .mat-mdc-form-field-icon-prefix > .mat-icon,
+  .mat-mdc-form-field-text-prefix > .mat-icon {
+    padding: 0px 0px 0px 8px !important;
+  }
 
-    input.search-input.mat-mdc-input-element {
-      max-height: 33px;
-      height: 33px;
-      box-sizing: border-box;
-    }
+  input.search-input.mat-mdc-input-element {
+    max-height: 33px;
+    height: 33px !important;
+    box-sizing: border-box;
   }
 }
 

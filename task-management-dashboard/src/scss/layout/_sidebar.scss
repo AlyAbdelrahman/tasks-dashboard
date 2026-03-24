@@ -1,0 +1,143 @@
+@use '../abstracts/variables' as *;
+
+$sidebar-item-height: 45px;
+$sidebar-item-gap: 4px;
+$sidebar-list-padding: 24px;
+// Single nav item corner radius (design: 8px)
+$sidebar-item-radius: 8px;
+$sidebar-item-padding-inline: 1rem; // ~16px inside each row (ref: 16–20px)
+
+:host {
+  display: block;
+  flex-shrink: 0;
+  width: min(100%, 16.5rem);
+  border-right: 1px solid color-mix(in srgb, var(--mat-sys-outline) 30%, transparent);
+  background-color: var(--mat-sys-surface);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  border-right: 1px solid color-mix(in srgb, var(--mat-sys-outline) 30%, transparent);
+}
+
+// mat-nav-list: 24px inset on all sides
+.sidebar__nav {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  box-sizing: border-box;
+  // Material may override display — margin between items is applied on each link below
+  padding: $sidebar-list-padding !important;
+}
+
+// 4px space between items (Material list items are not always flex children of the host, so use margin)
+.sidebar__nav a.sidebar__link {
+  margin-bottom: $sidebar-item-gap;
+  width: 12rem;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+a.sidebar__link {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: $sidebar-item-height;
+  min-height: $sidebar-item-height;
+  padding: 0 $sidebar-item-padding-inline;
+  box-sizing: border-box;
+  border-radius: $sidebar-item-radius !important;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-large);
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--mat-sys-on-surface) 6%, transparent);
+  }
+
+  &.is-active {
+    background-color: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+  }
+
+  &.is-active:hover {
+    background-color: color-mix(in srgb, var(--mat-sys-primary) 92%, var(--mat-sys-on-primary));
+    color: var(--mat-sys-on-primary);
+  }
+
+  ::ng-deep .mat-mdc-list-item-unscoped-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 0;
+  }
+
+  ::ng-deep .mat-mdc-list-item-primary-text,
+  ::ng-deep .mdc-list-item__primary-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Keep the visible row at 45px despite MDC content padding
+  ::ng-deep .mdc-list-item__content,
+  ::ng-deep .mat-mdc-list-item-content {
+    align-items: center;
+    padding-block: 0;
+  }
+
+  // Match 8px radius on MDC layers (focus / ripple / surface)
+  ::ng-deep .mat-mdc-list-item-surface,
+  ::ng-deep .mdc-list-item__ripple,
+  ::ng-deep .mat-focus-indicator::before {
+    border-radius: $sidebar-item-radius;
+  }
+}
+
+.sidebar__icon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  text-align: center;
+  font-size: 1.125rem;
+  line-height: 1;
+  margin-inline-end: 0.75rem; // ~12px icon–label gap (ref: 12–15px)
+}
+
+.sidebar__label {
+  min-width: 0;
+}
+
+.sidebar__cta-wrap {
+  padding: 0 $sidebar-list-padding $sidebar-list-padding;
+  margin-top: auto;
+  box-sizing: border-box;
+}
+
+.sidebar__cta {
+  width: 100%;
+  height: $sidebar-item-height;
+  font-weight: 600;
+  border-radius: $sidebar-item-radius;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .sidebar__nav {
+    padding: 1rem !important;
+  }
+
+  .sidebar__cta-wrap {
+    padding: 0 1rem 1rem;
+  }
+}

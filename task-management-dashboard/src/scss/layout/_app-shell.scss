@@ -1,0 +1,19 @@
+.layout-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.layout-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.layout-main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+}

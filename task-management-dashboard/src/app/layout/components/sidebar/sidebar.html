@@ -1,1 +1,21 @@
-<p>sidebar works!</p>
+<nav class="sidebar" aria-label="Main navigation">
+  <mat-nav-list class="sidebar__nav" [disableRipple]="true">
+    @for (item of navItems; track item.path) {
+    <a
+      mat-list-item
+      class="sidebar__link"
+      [routerLink]="item.path"
+      routerLinkActive="is-active"
+      [routerLinkActiveOptions]="{ exact: item.exact }"
+    >
+      <span matListItemIcon class="sidebar__icon">{{ item.icon }}</span>
+      <span matListItemTitle class="sidebar__label">{{ item.label }}</span>
+    </a>
+    }
+  </mat-nav-list>
+  <div class="sidebar__cta-wrap">
+    <button mat-flat-button type="button" color="primary" class="sidebar__cta" routerLink="/tasks">
+      + New Task
+    </button>
+  </div>
+</nav>

@@ -7,9 +7,15 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [Header, Sidebar, RouterOutlet],
   template: `
-    <app-header></app-header>
-    <app-sidebar></app-sidebar>
-    <router-outlet></router-outlet>
+    <div class="layout-root">
+      <app-header></app-header>
+      <div class="layout-content">
+        <app-sidebar></app-sidebar>
+        <main class="layout-main">
+          <router-outlet></router-outlet>
+        </main>
+      </div>
+    </div>
   `,
 })
 export class LayoutComponent {}

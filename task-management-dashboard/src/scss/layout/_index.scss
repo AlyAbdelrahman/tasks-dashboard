@@ -1,1 +1,4 @@
-// Layout shells, regions, grids — add rules or @import partials as needed.
+// App shell (layout-root, layout-content, layout-main)
+@use 'app-shell';
+@use 'sidebar';
+@use 'header';

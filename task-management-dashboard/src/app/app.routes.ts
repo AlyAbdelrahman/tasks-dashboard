@@ -22,6 +22,38 @@ export const routes: Routes = [
         loadChildren: () => import('./features/tasks/tasks.routes').then((m) => m.TASKS_ROUTES),
         title: 'Tasks',
       },
+      {
+        path: 'calendar',
+        loadComponent: () =>
+          import('./features/placeholder/placeholder.component').then(
+            (m) => m.PlaceholderComponent
+          ),
+        title: 'Calendar',
+      },
+      {
+        path: 'analytics',
+        loadComponent: () =>
+          import('./features/placeholder/placeholder.component').then(
+            (m) => m.PlaceholderComponent
+          ),
+        title: 'Analytics',
+      },
+      {
+        path: 'team',
+        loadComponent: () =>
+          import('./features/placeholder/placeholder.component').then(
+            (m) => m.PlaceholderComponent
+          ),
+        title: 'Team',
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./features/placeholder/placeholder.component').then(
+            (m) => m.PlaceholderComponent
+          ),
+        title: 'Settings',
+      },
     ],
   },
 
