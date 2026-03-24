@@ -10,6 +10,5 @@ import { MatIconButton } from '@angular/material/button';
   standalone: true,
   imports: [MatToolbar, MatFormField, MatInput, MatPrefix, MatIcon, MatIconButton],
   templateUrl: './header.html',
-  styleUrl: './header.scss',
 })
 export class Header {}
