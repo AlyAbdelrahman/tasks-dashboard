@@ -22,8 +22,7 @@ export interface SidebarNavItem {
     MatListItemIcon,
     MatListItemTitle,
   ],
-  templateUrl: './sidebar.html',
-  styleUrl: './sidebar.scss',
+  templateUrl: './sidebar.html'
 })
 export class Sidebar {
   readonly navItems: SidebarNavItem[] = [
