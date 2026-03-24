@@ -1,8 +1,34 @@
-<header class="header">
-    <h2>Dashboard</h2>
-  
-    <div class="actions">
-      <button>🔔</button>
-      <button>👤</button>
-    </div>
-  </header>
+<mat-toolbar class="app-header-toolbar" role="banner">
+  <div class="brand">
+    <span class="brand-icon" aria-hidden="true"></span>
+    <span class="brand-title">Task Manager</span>
+  </div>
+
+  <div class="search-center">
+    <mat-form-field
+      class="search-field"
+      appearance="outline"
+      subscriptSizing="dynamic"
+    >
+      <mat-icon matPrefix class="search-prefix">search</mat-icon>
+      <input
+        matInput
+        type="search"
+        placeholder="Search tasks..."
+        aria-label="Search tasks"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="toolbar-actions">
+    <button
+      mat-icon-button
+      type="button"
+      class="notification-btn"
+      aria-label="Notifications"
+    >
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <div class="avatar" aria-hidden="true">JD</div>
+  </div>
+</mat-toolbar>
