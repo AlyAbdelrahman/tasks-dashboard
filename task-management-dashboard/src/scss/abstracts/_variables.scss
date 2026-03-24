@@ -1,3 +1,7 @@
 // App-wide Sass variables (tokens not covered by Material system CSS)
 
 $color-notification-bell: #c9a227;
+
+// Layout breakpoints (mobile-first helpers — use in max-width queries as needed)
+$bp-header-compact: 1023px;
+$bp-header-stacked: 767px;
