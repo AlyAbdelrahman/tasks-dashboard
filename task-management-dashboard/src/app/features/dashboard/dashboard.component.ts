@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
+import { DashboardOverviewComponent } from './components/dashboard-overview/dashboard-overview.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  template: `
-    <section>
-      <h1>Dashboard</h1>
-      <p>Welcome to your task management dashboard.</p>
-    </section>
-  `
+  imports: [DashboardOverviewComponent],
+  templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {}
