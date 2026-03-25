@@ -1,0 +1,48 @@
+<section class="dashboard-tabs" aria-label="Task status filters">
+  <nav mat-tab-nav-bar class="dashboard-tabs__list" [tabPanel]="tabPanel" aria-label="Task status tabs">
+    @for (tab of tabs; track tab.id) {
+      <a
+        mat-tab-link
+        class="dashboard-tabs__tab"
+        [class.dashboard-tabs__tab--active]="tab.id === activeTab"
+        [active]="tab.id === activeTab"
+        (click)="setActiveTab(tab.id)"
+      >
+        {{ tab.label }}
+      </a>
+    }
+  </nav>
+
+  <div>
+  <div class="dashboard-tabs__actions">
+    <button mat-stroked-button type="button" class="dashboard-tabs__priority">Priority ▼</button>
+    <button mat-flat-button type="button" class="dashboard-tabs__new-task">+ New Task</button>
+  </div>
+
+  <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+  </div>
+</section>
+
+<section class="dashboard-tabs-content" aria-label="Tasks list">
+  <div class="dashboard-tabs-content__header">
+    <h3 class="dashboard-tabs-content__title">{{ tabs.find((tab) => tab.id === activeTab)?.label }} Tasks</h3>
+    <span class="dashboard-tabs-content__count">{{ visibleTasks.length }} items</span>
+  </div>
+
+  <div class="dashboard-tabs-content__grid">
+    @for (task of visibleTasks; track task.id) {
+      <article class="dashboard-tabs-content__card">
+        <div class="dashboard-tabs-content__card-header">
+          <span class="dashboard-tabs-content__task-id">{{ task.id }}</span>
+          <span class="dashboard-tabs-content__status" [class]="'dashboard-tabs-content__status dashboard-tabs-content__status--' + task.status">
+            {{ task.status }}
+          </span>
+        </div>
+        <h4 class="dashboard-tabs-content__task-title">{{ task.title }}</h4>
+        <p class="dashboard-tabs-content__meta">Assignee: {{ task.assignee }} · Due: {{ task.dueDate }}</p>
+      </article>
+    } @empty {
+      <p class="dashboard-tabs-content__empty">No tasks available for this tab yet.</p>
+    }
+  </div>
+</section>
