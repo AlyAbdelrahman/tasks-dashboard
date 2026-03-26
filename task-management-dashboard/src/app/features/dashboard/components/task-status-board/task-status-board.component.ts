@@ -3,8 +3,10 @@ import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskBoardService, TaskColumn, TaskItem } from './task-board.service';
+import { NewTaskModalComponent, TaskModalData, TaskModalResult } from '../../../../modal/new-task-modal/new-task-modal.component';
 
 @Component({
   selector: 'app-task-status-board',
@@ -15,6 +17,7 @@ import { TaskBoardService, TaskColumn, TaskItem } from './task-board.service';
 })
 export class TaskStatusBoardComponent {
   private readonly taskBoardService = inject(TaskBoardService);
+  private readonly dialog = inject(MatDialog);
   @Input() selectedTab: 'all' | TaskColumn['status'] = 'all';
 
   get columns(): TaskColumn[] {
@@ -48,6 +51,35 @@ export class TaskStatusBoardComponent {
     }
 
     return task.timeline.includes('Overdue') ? '⚠️' : '📅';
+  }
+
+  openTaskActionsModal(task: TaskItem): void {
+    const dialogRef = this.dialog.open<NewTaskModalComponent, TaskModalData, TaskModalResult | undefined>(
+      NewTaskModalComponent,
+      {
+        width: '560px',
+        maxWidth: '95vw',
+        data: {
+          mode: 'edit',
+          task,
+        },
+      },
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) {
+        return;
+      }
+
+      if (result.action === 'update') {
+        this.taskBoardService.updateTask(result.taskId, result.payload);
+        return;
+      }
+
+      if (result.action === 'delete') {
+        this.taskBoardService.deleteTask(result.taskId);
+      }
+    });
   }
 
   trackByColumnId(_index: number, column: TaskColumn): string {

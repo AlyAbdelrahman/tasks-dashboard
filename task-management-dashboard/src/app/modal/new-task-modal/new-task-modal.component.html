@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>New Task</h2>
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit Task' : 'New Task' }}</h2>
 
 <mat-dialog-content class="new-task-modal__content">
   <form [formGroup]="form" class="new-task-modal__form">
@@ -59,6 +59,11 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
+  @if (isEditMode) {
+    <button mat-stroked-button color="warn" type="button" (click)="deleteTask()">Delete</button>
+  }
   <button mat-stroked-button type="button" (click)="close()">Cancel</button>
-  <button mat-flat-button color="primary" type="button" (click)="save()">Create Task</button>
+  <button mat-flat-button color="primary" type="button" (click)="save()">
+    {{ isEditMode ? 'Save Changes' : 'Create Task' }}
+  </button>
 </mat-dialog-actions>

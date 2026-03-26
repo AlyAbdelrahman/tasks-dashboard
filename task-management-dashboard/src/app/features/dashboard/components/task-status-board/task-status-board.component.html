@@ -24,7 +24,13 @@
                   </mat-chip>
                 </mat-chip-set>
 
-                <button mat-icon-button type="button" class="task-card__menu" aria-label="Task actions">
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="task-card__menu"
+                  aria-label="Task actions"
+                  (click)="openTaskActionsModal(task)"
+                >
                   <mat-icon>more_vert</mat-icon>
                 </button>
               </div>

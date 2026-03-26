@@ -35,6 +35,7 @@ export interface NewTaskPayload {
   priority: PriorityLevel;
   status: TaskStatus;
 }
+export type UpdateTaskPayload = NewTaskPayload;
 
 const INITIAL_COLUMNS: TaskColumn[] = [
   {
@@ -66,20 +67,9 @@ export class TaskBoardService {
   readonly columns = this.columnsState.asReadonly();
 
   addTask(payload: NewTaskPayload): void {
-    const normalizedAssignee = payload.assignee.startsWith('@')
-      ? payload.assignee
-      : `@${payload.assignee}`;
-
     const newTask: TaskItem = {
       id: `${payload.status}-${Date.now()}`,
-      title: payload.title,
-      description: payload.description,
-      timeline: payload.timeline,
-      category: payload.category,
-      assignee: normalizedAssignee,
-      assigneeInitials: payload.assigneeInitials,
-      priority: payload.priority,
-      status: payload.status,
+      ...this.normalizePayload(payload),
     };
 
     this.columnsState.update((columns) =>
@@ -92,6 +82,76 @@ export class TaskBoardService {
             }
           : column,
       ),
+    );
+  }
+
+  updateTask(taskId: string, payload: UpdateTaskPayload): void {
+    this.columnsState.update((columns) => {
+      const sourceColumn = columns.find((column) => column.tasks.some((task) => task.id === taskId));
+
+      if (!sourceColumn) {
+        return columns;
+      }
+
+      const existingTask = sourceColumn.tasks.find((task) => task.id === taskId);
+      if (!existingTask) {
+        return columns;
+      }
+
+      const updatedTask: TaskItem = {
+        ...existingTask,
+        ...this.normalizePayload(payload),
+      };
+
+      if (sourceColumn.status === payload.status) {
+        return columns.map((column) => {
+          if (column.id !== sourceColumn.id) {
+            return column;
+          }
+
+          return {
+            ...column,
+            tasks: column.tasks.map((task) => (task.id === taskId ? updatedTask : task)),
+          };
+        });
+      }
+
+      return columns.map((column) => {
+        if (column.id === sourceColumn.id) {
+          return {
+            ...column,
+            total: Math.max(0, column.total - 1),
+            tasks: column.tasks.filter((task) => task.id !== taskId),
+          };
+        }
+
+        if (column.status === payload.status) {
+          return {
+            ...column,
+            total: column.total + 1,
+            tasks: [{ ...updatedTask, status: column.status }, ...column.tasks],
+          };
+        }
+
+        return column;
+      });
+    });
+  }
+
+  deleteTask(taskId: string): void {
+    this.columnsState.update((columns) =>
+      columns.map((column) => {
+        const hasTask = column.tasks.some((task) => task.id === taskId);
+        if (!hasTask) {
+          return column;
+        }
+
+        return {
+          ...column,
+          total: Math.max(0, column.total - 1),
+          tasks: column.tasks.filter((task) => task.id !== taskId),
+        };
+      }),
     );
   }
 
@@ -153,5 +213,17 @@ export class TaskBoardService {
       ...column,
       tasks: column.tasks.map((task) => ({ ...task })),
     }));
+  }
+
+  private normalizePayload(payload: NewTaskPayload): NewTaskPayload {
+    const normalizedAssignee = payload.assignee.startsWith('@')
+      ? payload.assignee
+      : `@${payload.assignee}`;
+
+    return {
+      ...payload,
+      assignee: normalizedAssignee,
+      assigneeInitials: payload.assigneeInitials.toUpperCase(),
+    };
   }
 }

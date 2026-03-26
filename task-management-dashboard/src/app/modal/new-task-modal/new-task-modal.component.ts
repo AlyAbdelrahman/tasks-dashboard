@@ -1,11 +1,27 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { NewTaskPayload, PriorityLevel, TaskStatus } from '../../features/dashboard/components/task-status-board/task-board.service';
+import {
+  NewTaskPayload,
+  PriorityLevel,
+  TaskItem,
+  TaskStatus,
+  UpdateTaskPayload,
+} from '../../features/dashboard/components/task-status-board/task-board.service';
+
+export interface TaskModalData {
+  mode: 'create' | 'edit';
+  task?: TaskItem;
+}
+
+export type TaskModalResult =
+  | { action: 'create'; payload: NewTaskPayload }
+  | { action: 'update'; taskId: string; payload: UpdateTaskPayload }
+  | { action: 'delete'; taskId: string };
 
 @Component({
   selector: 'app-new-task-modal',
@@ -23,7 +39,8 @@ import { NewTaskPayload, PriorityLevel, TaskStatus } from '../../features/dashbo
 })
 export class NewTaskModalComponent {
   private readonly formBuilder = inject(FormBuilder);
-  private readonly dialogRef = inject<MatDialogRef<NewTaskModalComponent, NewTaskPayload | undefined>>(MatDialogRef);
+  private readonly dialogRef = inject<MatDialogRef<NewTaskModalComponent, TaskModalResult | undefined>>(MatDialogRef);
+  private readonly dialogData = inject<TaskModalData | undefined>(MAT_DIALOG_DATA, { optional: true });
 
   readonly statuses: { label: string; value: TaskStatus }[] = [
     { label: 'To Do', value: 'todo' },
@@ -38,18 +55,33 @@ export class NewTaskModalComponent {
   ];
 
   readonly form = this.formBuilder.nonNullable.group({
-    title: ['', [Validators.required, Validators.maxLength(100)]],
-    description: ['', [Validators.required, Validators.maxLength(280)]],
-    timeline: ['', [Validators.required, Validators.maxLength(60)]],
-    category: ['', [Validators.required, Validators.maxLength(60)]],
-    assignee: ['', [Validators.required, Validators.maxLength(40)]],
-    assigneeInitials: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
-    priority: ['medium' as PriorityLevel, Validators.required],
-    status: ['todo' as TaskStatus, Validators.required],
+    title: [this.dialogData?.task?.title ?? '', [Validators.required, Validators.maxLength(100)]],
+    description: [this.dialogData?.task?.description ?? '', [Validators.required, Validators.maxLength(280)]],
+    timeline: [this.dialogData?.task?.timeline ?? '', [Validators.required, Validators.maxLength(60)]],
+    category: [this.dialogData?.task?.category ?? '', [Validators.required, Validators.maxLength(60)]],
+    assignee: [this.dialogData?.task?.assignee ?? '', [Validators.required, Validators.maxLength(40)]],
+    assigneeInitials: [this.dialogData?.task?.assigneeInitials ?? '', [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
+    priority: [this.dialogData?.task?.priority ?? ('medium' as PriorityLevel), Validators.required],
+    status: [this.dialogData?.task?.status ?? ('todo' as TaskStatus), Validators.required],
   });
+
+  get isEditMode(): boolean {
+    return this.dialogData?.mode === 'edit' && !!this.dialogData.task;
+  }
 
   close(): void {
     this.dialogRef.close(undefined);
+  }
+
+  deleteTask(): void {
+    if (!this.isEditMode || !this.dialogData?.task) {
+      return;
+    }
+
+    this.dialogRef.close({
+      action: 'delete',
+      taskId: this.dialogData.task.id,
+    });
   }
 
   save(): void {
@@ -59,7 +91,7 @@ export class NewTaskModalComponent {
     }
 
     const payload = this.form.getRawValue();
-    this.dialogRef.close({
+    const cleanedPayload: NewTaskPayload = {
       ...payload,
       assigneeInitials: payload.assigneeInitials.toUpperCase(),
       assignee: payload.assignee.trim(),
@@ -67,6 +99,20 @@ export class NewTaskModalComponent {
       description: payload.description.trim(),
       timeline: payload.timeline.trim(),
       category: payload.category.trim(),
+    };
+
+    if (this.isEditMode && this.dialogData?.task) {
+      this.dialogRef.close({
+        action: 'update',
+        taskId: this.dialogData.task.id,
+        payload: cleanedPayload,
+      });
+      return;
+    }
+
+    this.dialogRef.close({
+      action: 'create',
+      payload: cleanedPayload,
     });
   }
 }
