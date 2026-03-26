@@ -41,7 +41,6 @@ const STATUS_LABELS: Record<string, string> = {
     MatChipsModule,
   ],
   templateUrl: './search-tasks-modal.component.html',
-  styleUrl: './search-tasks-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchTasksModalComponent {
