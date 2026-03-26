@@ -15,7 +15,14 @@
 
   <div>
   <div class="dashboard-tabs__actions">
-    <button mat-stroked-button type="button" class="dashboard-tabs__priority">Priority ▼</button>
+    <button
+      mat-stroked-button
+      type="button"
+      class="dashboard-tabs__priority"
+      (click)="togglePrioritySort()"
+    >
+      {{ priorityButtonLabel }}
+    </button>
     <button mat-flat-button type="button" class="dashboard-tabs__new-task" (click)="openNewTaskModal()">+ New Task</button>
   </div>
 

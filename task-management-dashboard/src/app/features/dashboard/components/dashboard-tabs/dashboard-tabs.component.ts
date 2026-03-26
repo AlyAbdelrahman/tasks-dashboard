@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -8,7 +8,7 @@ import {
   TaskModalResult,
 } from '../../../../modal/new-task-modal/new-task-modal.component';
 import { TaskStatusBoardComponent } from '../task-status-board/task-status-board.component';
-import { TaskBoardService, TaskStatus } from '../task-status-board/task-board.service';
+import { PrioritySortDirection, TaskBoardService, TaskStatus } from '../task-status-board/task-board.service';
 
 export interface DashboardTab {
   id: DashboardTabId;
@@ -21,6 +21,7 @@ type DashboardTabId = 'all' | TaskStatus;
   standalone: true,
   imports: [MatTabsModule, MatButtonModule, MatDialogModule, TaskStatusBoardComponent],
   templateUrl: './dashboard-tabs.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardTabsComponent {
   private readonly dialog = inject(MatDialog);
@@ -36,6 +37,7 @@ export class DashboardTabsComponent {
   ];
 
   activeTab: DashboardTabId = this.tabs[0].id;
+  prioritySortDirection: PrioritySortDirection | null = null;
 
   setActiveTab(tabId: DashboardTabId): void {
     if (this.activeTab === tabId) {
@@ -63,5 +65,21 @@ export class DashboardTabsComponent {
         this.taskBoardService.addTask(result.payload);
       }
     });
+  }
+
+  togglePrioritySort(): void {
+    const nextDirection: PrioritySortDirection =
+      this.prioritySortDirection === 'desc' ? 'asc' : 'desc';
+
+    this.prioritySortDirection = nextDirection;
+    this.taskBoardService.sortTasksByPriority(nextDirection);
+  }
+
+  get priorityButtonLabel(): string {
+    if (this.prioritySortDirection === 'asc') {
+      return 'Priority ▲';
+    }
+
+    return 'Priority ▼';
   }
 }

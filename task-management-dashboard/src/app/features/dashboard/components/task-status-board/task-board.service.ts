@@ -43,6 +43,8 @@ export interface BoardStats {
   overdue: number;
 }
 
+export type PrioritySortDirection = 'asc' | 'desc';
+
 const INITIAL_COLUMNS: TaskColumn[] = [
   {
     id: 'todo-column',
@@ -266,6 +268,24 @@ export class TaskBoardService {
           tasks: column.tasks.filter((task) => task.id !== taskId),
         };
       }),
+    );
+  }
+
+  sortTasksByPriority(direction: PrioritySortDirection): void {
+    const priorityWeights: Record<PriorityLevel, number> = {
+      low: 1,
+      medium: 2,
+      high: 3,
+    };
+
+    this.columnsState.update((columns) =>
+      columns.map((column) => ({
+        ...column,
+        tasks: [...column.tasks].sort((left, right) => {
+          const difference = priorityWeights[left.priority] - priorityWeights[right.priority];
+          return direction === 'asc' ? difference : -difference;
+        }),
+      })),
     );
   }
 
