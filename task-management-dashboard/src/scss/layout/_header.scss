@@ -47,6 +47,16 @@
   }
 }
 
+.menu-toggle-btn {
+  display: none !important;
+}
+
+@media (max-width: $bp-header-compact) {
+  .menu-toggle-btn {
+    display: inline-flex !important;
+  }
+}
+
 .brand-icon {
   width: 1.75rem;
   height: 1.75rem;

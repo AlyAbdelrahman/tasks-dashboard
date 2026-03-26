@@ -1,5 +1,14 @@
 <mat-toolbar class="app-header-toolbar" role="banner">
   <div class="brand">
+    <button
+      mat-icon-button
+      type="button"
+      class="menu-toggle-btn"
+      aria-label="Toggle navigation menu"
+      (click)="onMenuToggle()"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
     <span class="brand-icon" aria-hidden="true"></span>
     <span class="brand-title">Task Manager</span>
   </div>

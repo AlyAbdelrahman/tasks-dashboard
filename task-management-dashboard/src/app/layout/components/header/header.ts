@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatFormField, MatPrefix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -15,9 +15,15 @@ import {
   standalone: true,
   imports: [MatToolbar, MatFormField, MatInput, MatPrefix, MatIcon, MatIconButton],
   templateUrl: './header.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
   private readonly dialog = inject(MatDialog);
+  readonly menuToggle = output<void>();
+
+  onMenuToggle(): void {
+    this.menuToggle.emit();
+  }
 
   openSearch(inputEl: HTMLInputElement): void {
     const query = inputEl.value;

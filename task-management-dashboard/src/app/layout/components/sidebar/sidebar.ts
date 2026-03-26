@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
@@ -30,11 +30,13 @@ export interface SidebarNavItem {
     MatListItemTitle,
     MatDialogModule,
   ],
-  templateUrl: './sidebar.html'
+  templateUrl: './sidebar.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar {
   private readonly dialog = inject(MatDialog);
   private readonly taskBoardService = inject(TaskBoardService);
+  readonly navItemSelected = output<void>();
 
   readonly navItems: SidebarNavItem[] = [
     { path: '/dashboard', label: 'Dashboard', icon: '📊', exact: true },
@@ -44,6 +46,10 @@ export class Sidebar {
     { path: '/team', label: 'Team', icon: '👥', exact: false },
     { path: '/settings', label: 'Settings', icon: '⚙️', exact: false },
   ];
+
+  onNavItemClick(): void {
+    this.navItemSelected.emit();
+  }
 
   openNewTaskModal(): void {
     const dialogRef = this.dialog.open<NewTaskModalComponent, TaskModalData, TaskModalResult | undefined>(
