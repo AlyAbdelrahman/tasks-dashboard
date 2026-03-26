@@ -1,5 +1,5 @@
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -15,13 +15,22 @@ import { TaskBoardService, TaskColumn, TaskItem } from './task-board.service';
 })
 export class TaskStatusBoardComponent {
   private readonly taskBoardService = inject(TaskBoardService);
+  @Input() selectedTab: 'all' | TaskColumn['status'] = 'all';
 
   get columns(): TaskColumn[] {
     return this.taskBoardService.columns();
   }
 
+  get filteredColumns(): TaskColumn[] {
+    if (this.selectedTab === 'all') {
+      return this.columns;
+    }
+
+    return this.columns.filter((column) => column.status === this.selectedTab);
+  }
+
   get connectedDropListIds(): string[] {
-    return this.columns.map((column) => column.id);
+    return this.filteredColumns.map((column) => column.id);
   }
 
   onTaskDrop(event: CdkDragDrop<TaskItem[]>): void {
