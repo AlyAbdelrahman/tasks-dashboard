@@ -1,0 +1,68 @@
+<h2 mat-dialog-title class="search-modal__title">
+  <mat-icon class="search-modal__title-icon">search</mat-icon>
+  Search Tasks
+</h2>
+
+<mat-dialog-content class="search-modal__content">
+  <mat-form-field appearance="outline" class="search-modal__field">
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      matInput
+      [formControl]="searchControl"
+      type="search"
+      placeholder="Search by title, description, category, or assignee..."
+      cdkFocusInitial
+    />
+    @if (hasQuery) {
+      <button matSuffix mat-icon-button type="button" aria-label="Clear search" (click)="searchControl.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+
+  @if (hasQuery) {
+    <p class="search-modal__count">{{ results.length }} {{ results.length === 1 ? 'result' : 'results' }} found</p>
+
+    <mat-nav-list class="search-modal__results">
+      @for (task of results; track task.id) {
+        <a mat-list-item class="search-modal__result-item" (click)="openEditModal(task)">
+          <div class="search-modal__result-row">
+            <div class="search-modal__result-info">
+              <span class="search-modal__result-title">{{ task.title }}</span>
+              <span class="search-modal__result-desc">{{ task.description }}</span>
+            </div>
+
+            <div class="search-modal__result-badges">
+              <mat-chip class="search-modal__priority" [class]="'search-modal__priority search-modal__priority--' + task.priority">
+                {{ task.priority }}
+              </mat-chip>
+              <mat-chip class="search-modal__status" [class]="'search-modal__status search-modal__status--' + task.status">
+                {{ getStatusLabel(task.status) }}
+              </mat-chip>
+            </div>
+          </div>
+
+          <div class="search-modal__result-meta">
+            <span>{{ task.assignee }}</span>
+            <span>{{ task.category }}</span>
+            <span>{{ getTimelineText(task) }}</span>
+          </div>
+        </a>
+      } @empty {
+        <div class="search-modal__empty">
+          <mat-icon class="search-modal__empty-icon">search_off</mat-icon>
+          <p>No tasks match your search.</p>
+        </div>
+      }
+    </mat-nav-list>
+  } @else {
+    <div class="search-modal__empty">
+      <mat-icon class="search-modal__empty-icon">manage_search</mat-icon>
+      <p>Start typing to search tasks...</p>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button type="button" (click)="close()">Close</button>
+</mat-dialog-actions>

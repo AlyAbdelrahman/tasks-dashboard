@@ -314,6 +314,23 @@ export class TaskBoardService {
     });
   }
 
+  searchTasks(query: string): TaskItem[] {
+    const trimmed = query.trim().toLowerCase();
+    if (!trimmed) {
+      return [];
+    }
+
+    return this.columnsState()
+      .flatMap((column) => column.tasks)
+      .filter(
+        (task) =>
+          task.title.toLowerCase().includes(trimmed) ||
+          task.description.toLowerCase().includes(trimmed) ||
+          task.category.toLowerCase().includes(trimmed) ||
+          task.assignee.toLowerCase().includes(trimmed),
+      );
+  }
+
   formatTimeline(task: TaskItem): string {
     if (task.status === 'done') {
       return task.dueDays === 0 ? 'Completed today' : 'Completed yesterday';

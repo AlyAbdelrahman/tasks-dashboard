@@ -9,10 +9,13 @@
       <mat-icon matPrefix class="search-prefix">search</mat-icon>
       <input
         matInput
+        #searchInput
         class="search-input"
         type="search"
         placeholder="Search tasks..."
         aria-label="Search tasks"
+        (focus)="openSearch(searchInput)"
+        (keydown.enter)="openSearch(searchInput)"
       />
     </mat-form-field>
   </div>
