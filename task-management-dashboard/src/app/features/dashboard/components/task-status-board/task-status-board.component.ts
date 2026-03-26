@@ -50,7 +50,11 @@ export class TaskStatusBoardComponent {
       return '✅';
     }
 
-    return task.timeline.includes('Overdue') ? '⚠️' : '📅';
+    return task.dueDays < 0 ? '⚠️' : '📅';
+  }
+
+  getTimelineText(task: TaskItem): string {
+    return this.taskBoardService.formatTimeline(task);
   }
 
   openTaskActionsModal(task: TaskItem): void {

@@ -3,7 +3,7 @@
     <article class="task-column">
       <header class="task-column__header">
         <h3 class="task-column__title">{{ column.label }}</h3>
-        <span class="task-column__count">{{ column.total }}</span>
+        <span class="task-column__count">{{ column.tasks.length }}</span>
       </header>
 
       <div
@@ -39,7 +39,7 @@
               <p class="task-card__description">{{ task.description }}</p>
 
               <div class="task-card__details">
-                <span class="task-card__timeline">{{ getTimelineIcon(task) }} {{ task.timeline }}</span>
+                <span class="task-card__timeline">{{ getTimelineIcon(task) }} {{ getTimelineText(task) }}</span>
                 <span class="task-card__category">{{ task.category }}</span>
               </div>
 

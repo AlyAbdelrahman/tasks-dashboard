@@ -57,7 +57,7 @@ export class NewTaskModalComponent {
   readonly form = this.formBuilder.nonNullable.group({
     title: [this.dialogData?.task?.title ?? '', [Validators.required, Validators.maxLength(100)]],
     description: [this.dialogData?.task?.description ?? '', [Validators.required, Validators.maxLength(280)]],
-    timeline: [this.dialogData?.task?.timeline ?? '', [Validators.required, Validators.maxLength(60)]],
+    dueDays: [this.dialogData?.task?.dueDays ?? 0, [Validators.required]],
     category: [this.dialogData?.task?.category ?? '', [Validators.required, Validators.maxLength(60)]],
     assignee: [this.dialogData?.task?.assignee ?? '', [Validators.required, Validators.maxLength(40)]],
     assigneeInitials: [this.dialogData?.task?.assigneeInitials ?? '', [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
@@ -67,6 +67,24 @@ export class NewTaskModalComponent {
 
   get isEditMode(): boolean {
     return this.dialogData?.mode === 'edit' && !!this.dialogData.task;
+  }
+
+  get dueDaysHint(): string {
+    const value = this.form.controls.dueDays.value;
+    if (value < 0) {
+      const abs = Math.abs(value);
+      return `Overdue by ${abs} ${abs === 1 ? 'day' : 'days'}`;
+    }
+
+    if (value === 0) {
+      return 'Due today';
+    }
+
+    if (value === 7) {
+      return 'Due in 1 week';
+    }
+
+    return `Due in ${value} ${value === 1 ? 'day' : 'days'}`;
   }
 
   close(): void {
@@ -97,7 +115,6 @@ export class NewTaskModalComponent {
       assignee: payload.assignee.trim(),
       title: payload.title.trim(),
       description: payload.description.trim(),
-      timeline: payload.timeline.trim(),
       category: payload.category.trim(),
     };
 

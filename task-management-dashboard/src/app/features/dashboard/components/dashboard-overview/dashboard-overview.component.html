@@ -8,7 +8,7 @@
         </div>
         <span class="stat-card__value">{{ stat.value }}</span>
         <span class="stat-card__hint" [ngClass]="'stat-card__hint--' + stat.hintType">
-          {{ stat.hint }}
+          {{ stat.value }} {{ stat.label | lowercase }}
         </span>
       </mat-card-content>
     </mat-card>

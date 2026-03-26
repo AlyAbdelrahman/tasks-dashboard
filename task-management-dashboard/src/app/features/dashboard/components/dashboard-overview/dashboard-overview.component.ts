@@ -1,50 +1,52 @@
-import { Component } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { LowerCasePipe, NgClass } from '@angular/common';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import { TaskBoardService, BoardStats } from '../task-status-board/task-board.service';
 
 export interface DashboardStat {
   label: string;
-  value: string;
+  value: number;
   emoji: string;
-  hint: string;
   hintType: 'positive' | 'negative' | 'neutral';
 }
 
 @Component({
   selector: 'app-dashboard-overview',
   standalone: true,
-  imports: [NgClass, MatCard, MatCardContent],
-  templateUrl: './dashboard-overview.component.html'
+  imports: [NgClass, LowerCasePipe, MatCard, MatCardContent],
+  templateUrl: './dashboard-overview.component.html',
 })
 export class DashboardOverviewComponent {
-  readonly stats: DashboardStat[] = [
-    {
-      label: 'Total Tasks',
-      value: '156',
-      emoji: '📊',
-      hint: '+12 this week',
-      hintType: 'positive',
-    },
-    {
-      label: 'Completed',
-      value: '89',
-      emoji: '✅',
-      hint: '+8 today',
-      hintType: 'positive',
-    },
-    {
-      label: 'In Progress',
-      value: '42',
-      emoji: '🔄',
-      hint: 'Same as yesterday',
-      hintType: 'neutral',
-    },
-    {
-      label: 'Overdue',
-      value: '25',
-      emoji: '⚠️',
-      hint: '+3 today',
-      hintType: 'negative',
-    },
-  ];
+  private readonly taskBoardService = inject(TaskBoardService);
+
+  get stats(): DashboardStat[] {
+    const boardStats: BoardStats = this.taskBoardService.stats();
+
+    return [
+      {
+        label: 'Total Tasks',
+        value: boardStats.totalTasks,
+        emoji: '📊',
+        hintType: 'positive',
+      },
+      {
+        label: 'Completed',
+        value: boardStats.completed,
+        emoji: '✅',
+        hintType: 'positive',
+      },
+      {
+        label: 'In Progress',
+        value: boardStats.inProgress,
+        emoji: '🔄',
+        hintType: 'neutral',
+      },
+      {
+        label: 'Overdue',
+        value: boardStats.overdue,
+        emoji: '⚠️',
+        hintType: boardStats.overdue > 0 ? 'negative' : 'positive',
+      },
+    ];
+  }
 }
