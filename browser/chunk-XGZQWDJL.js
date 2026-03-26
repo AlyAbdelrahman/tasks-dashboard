@@ -1,0 +1,1 @@
+import{Qb as o,ab as n,wb as s,xb as a}from"./chunk-YCVGICMK.js";import"./chunk-2NFLSA4Y.js";var m=class t{static \u0275fac=function(e){return new(e||t)};static \u0275cmp=n({type:t,selectors:[["app-tasks"]],decls:2,vars:0,template:function(e,p){e&1&&(s(0,"div"),o(1,"Task"),a())},encapsulation:2})};export{m as TasksComponent};

@@ -1,9 +1,0 @@
-{
-    "tasks": [],
-    "users": [
-      { "id": "1", "name": "Alice Johnson", "avatar": "AJ", "email": "alice@example.com" },
-      { "id": "2", "name": "Bob Smith", "avatar": "BS", "email": "bob@example.com" },
-      { "id": "3", "name": "Carol White", "avatar": "CW", "email": "carol@example.com" }
-    ],
-    "activities": []
-  }
