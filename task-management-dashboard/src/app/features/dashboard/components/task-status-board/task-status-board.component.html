@@ -1,0 +1,50 @@
+<section class="task-status-board" aria-label="Task status board">
+  @for (column of columns; track trackByColumnId($index, column)) {
+    <article class="task-column">
+      <header class="task-column__header">
+        <h3 class="task-column__title">{{ column.label }}</h3>
+        <span class="task-column__count">{{ column.total }}</span>
+      </header>
+
+      <div
+        cdkDropList
+        [id]="column.id"
+        [cdkDropListData]="column.tasks"
+        [cdkDropListConnectedTo]="connectedDropListIds"
+        class="task-column__list"
+        (cdkDropListDropped)="onTaskDrop($event, column.status)"
+      >
+        @for (task of column.tasks; track trackByTaskId($index, task)) {
+          <mat-card cdkDrag class="task-card" [class.task-card--highlighted]="task.highlighted">
+            <mat-card-content class="task-card__content">
+              <div class="task-card__meta">
+                <mat-chip-set>
+                  <mat-chip class="task-priority" [class]="'task-priority task-priority--' + task.priority">
+                    {{ task.priority }}
+                  </mat-chip>
+                </mat-chip-set>
+
+                <button mat-icon-button type="button" class="task-card__menu" aria-label="Task actions">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </div>
+
+              <h4 class="task-card__title">{{ task.title }}</h4>
+              <p class="task-card__description">{{ task.description }}</p>
+
+              <div class="task-card__details">
+                <span class="task-card__timeline">{{ task.status === 'done' ? '✅' : task.timeline.includes('Overdue') ? '⚠️' : '📅' }} {{ task.timeline }}</span>
+                <span class="task-card__category">{{ task.category }}</span>
+              </div>
+
+              <footer class="task-card__footer">
+                <span class="task-card__avatar">{{ task.assigneeInitials }}</span>
+                <span class="task-card__assignee">{{ task.assignee }}</span>
+              </footer>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    </article>
+  }
+</section>
