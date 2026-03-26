@@ -1,3 +1,4 @@
 // Optional global component bundles. Per-component styles (e.g. _header.scss) are
 // @imported from the Angular component .scss to preserve encapsulation.
 @use 'task-status-board';
+@use 'new-task-modal';

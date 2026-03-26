@@ -1,0 +1,30 @@
+.new-task-modal__content {
+  padding-top: 4px;
+}
+
+.new-task-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 500px;
+}
+
+.new-task-modal__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .new-task-modal__form {
+    min-width: auto;
+  }
+
+  .new-task-modal__row {
+    grid-template-columns: 1fr;
+  }
+}

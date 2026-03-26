@@ -12,7 +12,7 @@
         [cdkDropListData]="column.tasks"
         [cdkDropListConnectedTo]="connectedDropListIds"
         class="task-column__list"
-        (cdkDropListDropped)="onTaskDrop($event, column.status)"
+        (cdkDropListDropped)="onTaskDrop($event)"
       >
         @for (task of column.tasks; track trackByTaskId($index, task)) {
           <mat-card cdkDrag class="task-card" [class.task-card--highlighted]="task.highlighted">
@@ -33,7 +33,7 @@
               <p class="task-card__description">{{ task.description }}</p>
 
               <div class="task-card__details">
-                <span class="task-card__timeline">{{ task.status === 'done' ? '✅' : task.timeline.includes('Overdue') ? '⚠️' : '📅' }} {{ task.timeline }}</span>
+                <span class="task-card__timeline">{{ getTimelineIcon(task) }} {{ task.timeline }}</span>
                 <span class="task-card__category">{{ task.category }}</span>
               </div>
 
